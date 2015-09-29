@@ -43,6 +43,14 @@ module Heaven
         task == "deploy"
       end
 
+      def locked?
+        task == "deploy:lock"
+      end
+
+      def unlocked?
+        task == "deploy:unlock"
+      end
+
       def change_delivery_enabled?
         ENV.key?(DISPLAY_COMMITS_KEY)
       end

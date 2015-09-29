@@ -28,7 +28,13 @@ module Heaven
         message << " : #{user_link}"
         case state
         when "success"
-          message << "'s #{environment} deployment of #{repository_link} is done! "
+          if locked?
+            message = "#{user_link} locked #{repository_link} in #{environment}! "
+          elsif unlocked?
+            message = "#{user_link} unlocked #{repository_link} in #{environment}! "
+          else
+            message << "'s #{environment} deployment of #{repository_link} is done! "
+          end
         when "failure"
           message << "'s #{environment} deployment of #{repository_link} failed. "
         when "error"
