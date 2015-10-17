@@ -9,7 +9,7 @@ module Heaven
       end
 
       def task
-        deployment_data["task"] || "deploy"
+        deployment_data["task"].sub(/^deploy:/, "") || "deploy"
       end
 
       def deploy_command_format
