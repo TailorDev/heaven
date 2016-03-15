@@ -1,20 +1,35 @@
-FROM ruby:2.3.0
-MAINTAINER emdentec ltd. <docker@emdentec.com>
+FROM ruby:2.3-alpine
+MAINTAINER William Durand <will+git@drnd.me>
 
-RUN mkdir -p /root/.ssh
+ RUN apk update && apk --update add \
+     # required for Heaven app
+     postgresql-client tzdata libxml2-dev libxslt-dev \
+     # required during deployments
+     git nodejs bash build-base autoconf python automake rsync nasm openssh && \
+     rm -rf /var/cache/apk/*
 
-ENV WORK_DIR /usr/lib/heaven
+ADD Gemfile /app/
+ADD Gemfile.lock /app/
 
-RUN mkdir -p $WORK_DIR
+RUN apk --update add --virtual build-dependencies \
+    ruby-dev postgresql-dev libc-dev linux-headers && \
+    cd /app ; bundle config build.nokogiri --use-system-libraries ; \
+    bundle install --without development test && \
+    apk del build-dependencies
 
-COPY Gemfile $WORK_DIR/Gemfile
-COPY Gemfile.lock $WORK_DIR/Gemfile.lock
-RUN cd $WORK_DIR && bundle install
+ADD . /app
+RUN addgroup heaven && \
+    adduser -D -H -G heaven heaven && \
+    chown -R heaven:heaven /app
+USER heaven
 
-COPY . $WORK_DIR
+ENV RAILS_ENV production
+ENV RACK_ENV production
+ENV REDIS_PROVIDER REDIS_URL
+ENV HEAVEN_ENV 1
 
-WORKDIR $WORK_DIR
-EXPOSE 80
+WORKDIR /app
 
-ENTRYPOINT ["bundle", "exec"]
-CMD ["unicorn", "-p", "80", "-c", "config/unicorn.rb"]
+EXPOSE 8080
+
+CMD ["bundle", "exec", "unicorn", "-p", "8080", "-c", "./config/unicorn.rb"]
