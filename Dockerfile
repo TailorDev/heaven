@@ -13,8 +13,7 @@ ADD Gemfile.lock /app/
 
 RUN apk --update add --virtual build-dependencies \
     ruby-dev postgresql-dev libc-dev linux-headers && \
-    cd /app ; bundle config build.nokogiri --use-system-libraries ; \
-    bundle install --without development test && \
+    cd /app ; bundle install --without development test && \
     apk del build-dependencies
 
 ADD . /app
