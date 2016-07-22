@@ -8,6 +8,10 @@ describe "Receiving GitHub hooks", :request do
     stub_deploy_statuses
   end
 
+  def app
+    Heaven::Application
+  end
+
   describe "POST /events" do
     it "returns a forbidden error to invalid hosts" do
       github_event("ping")

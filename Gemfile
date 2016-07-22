@@ -25,10 +25,10 @@ gem "flowdock"
 
 group :test do
   gem "sqlite3", "1.3.10"
-  gem "webmock"
+  gem "webmock", "1.20.1"
   gem "simplecov", "0.7.1"
   gem "rubocop"
-  gem "rspec-rails"
+  gem "rspec-rails", "~>2.14.1"
 end
 
 group :development do

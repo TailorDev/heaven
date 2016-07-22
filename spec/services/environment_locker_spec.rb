@@ -16,7 +16,7 @@ describe EnvironmentLocker do
       locker = EnvironmentLocker.new(lock_params.merge(:task => "deploy:lock"))
       locker.redis = redis
 
-      expect(locker.lock?).to be_true
+      expect(locker.lock?).to be true
     end
 
     context "with hubot deploy prefix" do
@@ -24,7 +24,7 @@ describe EnvironmentLocker do
 
       it "is true if the task is ship:lock" do
         locker = EnvironmentLocker.new(lock_params.merge(:task => "ship:lock"))
-        expect(locker.lock?).to be_true
+        expect(locker.lock?).to be true
       end
     end
   end
@@ -34,7 +34,7 @@ describe EnvironmentLocker do
       locker = EnvironmentLocker.new(lock_params.merge(:task => "deploy:unlock"))
       locker.redis = redis
 
-      expect(locker.unlock?).to be_true
+      expect(locker.unlock?).to be true
     end
 
     context "with hubot deploy prefix" do
@@ -42,7 +42,7 @@ describe EnvironmentLocker do
 
       it "is true if the task is ship:unlock" do
         locker = EnvironmentLocker.new(lock_params.merge(:task => "ship:unlock"))
-        expect(locker.unlock?).to be_true
+        expect(locker.unlock?).to be true
       end
     end
   end
@@ -85,13 +85,13 @@ describe EnvironmentLocker do
     it "is true if the repo/environment pair exists" do
       expect(redis).to receive(:exists).with("atmos/heaven-production-lock").and_return(true)
 
-      expect(locker.locked?).to be_true
+      expect(locker.locked?).to be true
     end
 
     it "is false if the repo/environment pair exists" do
       expect(redis).to receive(:exists).with("atmos/heaven-production-lock").and_return(false)
 
-      expect(locker.locked?).to be_false
+      expect(locker.locked?).to be false
     end
   end
 
