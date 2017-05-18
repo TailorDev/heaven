@@ -5,7 +5,7 @@ MAINTAINER William Durand <will+git@drnd.me>
      # required for Heaven app
      postgresql-client tzdata libxml2-dev libxslt-dev \
      # required during deployments
-     git nodejs bash build-base autoconf python automake rsync nasm openssh && \
+     git nodejs bash build-base autoconf python automake rsync nasm openssh curl && \
      rm -rf /var/cache/apk/*
 
 ADD Gemfile /app/
@@ -18,7 +18,7 @@ RUN apk --update add --virtual build-dependencies \
 
 ADD . /app
 RUN addgroup heaven && \
-    adduser -D -H -G heaven heaven && \
+    adduser -D -G heaven heaven && \
     chown -R heaven:heaven /app
 USER heaven
 
