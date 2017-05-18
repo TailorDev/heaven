@@ -11,7 +11,10 @@ module Heaven
         Rails.logger.info "slack: #{filtered_message}"
         Rails.logger.info "message: #{message}"
 
-        output_message << "New deployment triggered :rocket: (##{deployment_number})"
+        if pending? || deployment_desc =~ /Auto-Deployed/
+          output_message = "New deployment triggered :rocket: (##{deployment_number})"
+        end
+
         slack_account.ping "",
           :channel     => "##{chat_room}",
           :username    => slack_bot_name,
@@ -19,13 +22,19 @@ module Heaven
           :attachments => [{
             :text    => filtered_message,
             :color   => green? ? "good" : "danger",
-            :pretext => pending? ? output_message : " "
+            :pretext => output_message
           }]
       end
 
       def default_message
         message = output_link("##{deployment_number}")
         message << " : #{user_link}"
+
+        auto = " "
+        if deployment_desc =~ /Auto-Deployed/
+          auto = pending? ? " *automatically* " : " *automatic* "
+        end
+
         case state
         when "success"
           if locked?
@@ -33,7 +42,7 @@ module Heaven
           elsif unlocked?
             message = "#{user_link} unlocked #{repository_link} in #{environment}! "
           else
-            message << "'s #{environment} deployment of #{repository_link} is done! "
+            message << "'s#{auto}#{environment} deployment of #{repository_link} is done! "
 
             if not environment_url.strip.empty?
               message << "Check it out at: #{environment_url}"
@@ -42,12 +51,12 @@ module Heaven
             message
           end
         when "failure"
-          message << "'s #{environment} deployment of #{repository_link} failed. "
+          message << "'s#{auto}#{environment} deployment of #{repository_link} failed. "
         when "error"
-          message << "'s #{environment} deployment of #{repository_link} has errors"
+          message << "'s#{auto}#{environment} deployment of #{repository_link} has errors"
           message << ": #{description}" unless description =~ /Deploying from Heaven/
         when "pending"
-          message << " is deploying #{repository_link("/tree/#{ref}")} to #{environment}."
+          message << " is deploying#{auto}#{repository_link("/tree/#{ref}")} to #{environment}."
         else
           puts "Unhandled deployment state, #{state}"
         end

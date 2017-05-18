@@ -83,6 +83,10 @@ module Heaven
         data["deployment"]
       end
 
+      def deployment_desc
+        deployment["description"]
+      end
+
       def environment
         deployment["environment"]
       end
