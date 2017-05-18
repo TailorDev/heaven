@@ -87,6 +87,10 @@ module Heaven
         deployment["environment"]
       end
 
+      def environment_url
+        deployment_payload["config"]["#{environment}_url"] || ""
+      end
+
       def task
         deployment["task"]
       end
@@ -191,7 +195,7 @@ module Heaven
       end
 
       def output_link(link_title = "deployment")
-        if target_url
+        if not target_url.to_s.strip.empty?
           "[#{link_title}](#{target_url})"
         else
           link_title

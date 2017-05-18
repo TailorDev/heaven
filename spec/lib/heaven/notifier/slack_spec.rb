@@ -50,4 +50,19 @@ describe "Heaven::Notifier::Slack" do
     ]
     expect(n.default_message).to eql result.join("")
   end
+
+  it "handles successful deployment statuses with environment_url" do
+    data = decoded_fixture_data("deployment-success-with-env-url")
+
+    n = Heaven::Notifier::Slack.new(data)
+
+    result = [
+      "[#11627](https://gist.github.com/fa77d9fb1fe41c3bb3a3ffb2c) ",
+      ": [atmos](https://github.com/atmos)'s production deployment of ",
+      "[my-robot](https://github.com/atmos/my-robot) ",
+      "is done! ",
+      "Check it out at: https://example.org"
+    ]
+    expect(n.default_message).to eql result.join("")
+  end
 end

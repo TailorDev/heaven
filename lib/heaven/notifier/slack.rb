@@ -11,7 +11,7 @@ module Heaven
         Rails.logger.info "slack: #{filtered_message}"
         Rails.logger.info "message: #{message}"
 
-        output_message << "##{deployment_number} - #{repo_name} / #{ref} / #{environment}"
+        output_message << "Deploy ##{deployment_number} of #{repository_link} (#{ref}) in #{environment}"
         slack_account.ping "",
           :channel     => "##{chat_room}",
           :username    => slack_bot_name,
@@ -34,12 +34,18 @@ module Heaven
             message = "#{user_link} unlocked #{repository_link} in #{environment}! "
           else
             message << "'s #{environment} deployment of #{repository_link} is done! "
+
+            if not environment_url.strip.empty?
+              message << "Check it out at: #{environment_url}"
+            end
+
+            message
           end
         when "failure"
           message << "'s #{environment} deployment of #{repository_link} failed. "
         when "error"
-          message << "'s #{environment} deployment of #{repository_link} has errors. #{ascii_face} "
-          message << description unless description =~ /Deploying from Heaven/
+          message << "'s #{environment} deployment of #{repository_link} has errors"
+          message << ": #{description}" unless description =~ /Deploying from Heaven/
         when "pending"
           message << " is deploying #{repository_link("/tree/#{ref}")} to #{environment}."
         else
