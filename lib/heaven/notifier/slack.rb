@@ -11,7 +11,7 @@ module Heaven
         Rails.logger.info "slack: #{filtered_message}"
         Rails.logger.info "message: #{message}"
 
-        output_message << "Deploy ##{deployment_number} of #{repository_link} (#{ref}) in #{environment}"
+        output_message << "New message for deploy ##{deployment_number}"
         slack_account.ping "",
           :channel     => "##{chat_room}",
           :username    => slack_bot_name,
