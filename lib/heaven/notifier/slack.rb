@@ -20,9 +20,10 @@ module Heaven
           :username    => slack_bot_name,
           :icon_url    => slack_bot_icon,
           :attachments => [{
-            :text    => filtered_message,
-            :color   => green? ? "good" : "danger",
-            :pretext => output_message
+            :text      => filtered_message,
+            :color     => green? ? "good" : "danger",
+            :pretext   => output_message,
+            :mrkdwn_in => ["text", "pretext"]
           }]
       end
 
