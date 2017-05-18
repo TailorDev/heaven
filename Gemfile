@@ -28,7 +28,7 @@ group :test do
   gem "webmock", "1.20.1"
   gem "simplecov", "0.7.1"
   gem "rubocop"
-  gem "rspec-rails", "~>2.14.1"
+  gem "rspec-rails"
 end
 
 group :development do
