@@ -54,7 +54,7 @@ module Heaven
       end
 
       def slack_formatted(message)
-        ::Slack::Notifier::LinkFormatter.format(message)
+        ::Slack::Notifier::Util::LinkFormatter.format(message)
       end
 
       def changes
