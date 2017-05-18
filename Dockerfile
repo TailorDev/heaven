@@ -19,7 +19,7 @@ RUN apk --update add --virtual build-dependencies \
 ADD . /app
 RUN addgroup heaven && \
     adduser -D -G heaven heaven && \
-    chown -R heaven:heaven /app
+    chown -R heaven:heaven /app /usr/local/bundle/config
 USER heaven
 
 ENV RAILS_ENV production
