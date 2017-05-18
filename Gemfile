@@ -21,7 +21,6 @@ gem "capistrano", "2.9.0"
 gem "hipchat"
 gem "campfiyah"
 gem "slack-notifier"
-gem "flowdock"
 
 group :test do
   gem "sqlite3", "1.3.10"

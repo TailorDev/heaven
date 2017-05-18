@@ -1,7 +1,6 @@
 require "heaven/notifier/default"
 require "heaven/notifier/campfire"
 require "heaven/notifier/hipchat"
-require "heaven/notifier/flowdock"
 require "heaven/notifier/slack"
 
 module Heaven
@@ -12,8 +11,6 @@ module Heaven
         ::Heaven::Notifier::Slack.new(payload)
       elsif hipchat?
         ::Heaven::Notifier::Hipchat.new(payload)
-      elsif flowdock?
-        ::Heaven::Notifier::Flowdock.new(payload)
       elsif campfire?
         ::Heaven::Notifier::Campfire.new(payload)
       else
@@ -27,10 +24,6 @@ module Heaven
 
     def self.hipchat?
       !ENV["HIPCHAT_TOKEN"].nil?
-    end
-
-    def self.flowdock?
-      !ENV["FLOWDOCK_USER_API_TOKEN"].nil?
     end
 
     def self.campfire?
