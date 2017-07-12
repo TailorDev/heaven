@@ -17,8 +17,8 @@ RUN apk --update add --virtual build-dependencies \
     apk del build-dependencies
 
 ADD . /app
-RUN addgroup heaven && \
-    adduser -D -G heaven heaven && \
+RUN addgroup -g 2000 heaven && \
+    adduser -u 2000 -D -G heaven heaven && \
     chown -R heaven:heaven /app /usr/local/bundle/config
 USER heaven
 
