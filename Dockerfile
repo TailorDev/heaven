@@ -1,8 +1,8 @@
 FROM ruby:2.4.0
 MAINTAINER William Durand <will+git@drnd.me>
 
-#ENV TZ=Europe/Paris
-#RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -y \
     # required for Heaven app
