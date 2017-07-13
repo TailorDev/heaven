@@ -72,7 +72,7 @@ IndentationWidth:
 MethodLength:
   CountComments: false  # count full line comments?
   Max: 25
-  Severity: error
+  Severity: warning
 
 Alias:
   Enabled: false # We have no guidance on alias vs alias_method
@@ -100,6 +100,10 @@ AllCops:
     - 'script/**/*'
     - 'config/**/*'
     - 'vendor/**/*'
-  # By default, the rails cops are not run. Override in project or home
-  # directory .rubocop.yml files, or by giving the -R/--rails option.
-  RunRailsCops: false
+# By default, the rails cops are not run. Override in project or home
+# directory .rubocop.yml files, or by giving the -R/--rails option.
+Rails:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

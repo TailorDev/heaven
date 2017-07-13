@@ -4,12 +4,12 @@ describe "Heaven::Notifier::Default" do
   it "does not deliver changes unless an environment opt-in is present" do
     notifier = Heaven::Notifier::Default.new("{}")
 
-    expect(notifier.change_delivery_enabled?).to be_false
+    expect(notifier.change_delivery_enabled?).to be false
 
     ENV["HEAVEN_NOTIFIER_DISPLAY_COMMITS"] = "true"
 
     notifier = Heaven::Notifier::Default.new("{}")
 
-    expect(notifier.change_delivery_enabled?).to be_true
+    expect(notifier.change_delivery_enabled?).to be true
   end
 end

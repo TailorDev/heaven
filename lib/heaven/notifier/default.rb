@@ -43,6 +43,14 @@ module Heaven
         task == "deploy"
       end
 
+      def locked?
+        task == "deploy:lock"
+      end
+
+      def unlocked?
+        task == "deploy:unlock"
+      end
+
       def change_delivery_enabled?
         ENV.key?(DISPLAY_COMMITS_KEY)
       end
@@ -75,8 +83,16 @@ module Heaven
         data["deployment"]
       end
 
+      def deployment_desc
+        deployment["description"]
+      end
+
       def environment
         deployment["environment"]
+      end
+
+      def environment_url
+        deployment_payload["config"]["#{environment}_url"] || ""
       end
 
       def task
@@ -183,7 +199,7 @@ module Heaven
       end
 
       def output_link(link_title = "deployment")
-        if target_url
+        if not target_url.to_s.strip.empty?
           "[#{link_title}](#{target_url})"
         else
           link_title

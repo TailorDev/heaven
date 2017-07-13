@@ -17,7 +17,7 @@ module Heaven
         @guid        = guid
         @name        = "unknown"
         @data        = data
-        @credentials = ::Deployment::Credentials.new(File.expand_path("~"))
+        @credentials = ::Deployment::Credentials.new(working_directory)
       end
 
       def output

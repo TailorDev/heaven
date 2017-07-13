@@ -45,18 +45,6 @@ end
 | HIPCHAT_TOKEN           | The notification token to send messages to hipchat. |
 | HIPCHAT_ROOM            | The room to post deployment messages to.        |
 
-## Flowdock
-
-### Configuration
-
-| Environmental Variables |                                                 |
-|-------------------------|-------------------------------------------------|
-| FLOWDOCK_USER_API_TOKEN | A user's api token from Flowdock [account page][22]. This is used to access the api and post some messages. |
-| FLOWDOCK_FLOW_TOKENS | A JSON string that has flow ids and [flow source tokens][23] as key-value pairs. You need to generate the source tokens using OAuth api. Note that these are part of the new [Flowdock threads api][24] and thus the old flow tokens will not work. |
-| FLOWDOCK_USER_NAME | (Optional) A name that is displayed as the author for deployment activities. Defaults to `Heaven` |
-| FLOWDOCK_USER_EMAIL | (Optional) An email address for the above user. Defaults to dummy `build@flowdock.com`. |
-| FLOWDOCK_USER_AVATAR | (Optional) A url to an image that is shown for the above user as an avatar. By default a success and failure icon are used depending on the build status. |
-
 ## Commit Change Notifications
 
 Successful deployments to any environment are always compared with the last
@@ -88,6 +76,4 @@ successful deployment to the production environment.
 [19]: https://devcenter.heroku.com/articles/releases
 [20]: https://github.com/atmos/hubot-deploy
 [21]: https://my.slack.com/services/new/incoming-webhook
-[22]: https://www.flowdock.com/account/tokens
 [23]: https://gist.github.com/Mumakil/1d184a3f06bcd087c5e2
-[24]: https://www.flowdock.com/api/how-to-integrate

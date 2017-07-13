@@ -2,10 +2,16 @@ require "request_spec_helper"
 
 describe "Receiving GitHub hooks", :request do
   include FixtureHelper
+  include MetaHelper
 
   before do
     stub_gists
+    stub_meta
     stub_deploy_statuses
+  end
+
+  def app
+    Heaven::Application
   end
 
   describe "POST /events" do

@@ -4,6 +4,8 @@ if [ -d /usr/share/rbenv/shims ]; then
   export RBENV_VERSION="1.9.3-p231-tcs-github"
 fi
 
+set -e
+
 set -x
 git log -n 1 HEAD | cat
 ruby -v
@@ -17,4 +19,4 @@ script/bootstrap
 bundle exec rake db:migrate
 bundle exec rake assets:precompile
 bundle exec rspec spec
-bundle exec rubocop
+bundle exec rubocop || exit 0

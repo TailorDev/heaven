@@ -1,4 +1,4 @@
-ruby "2.3.1"
+ruby "2.4.0"
 source "https://rubygems.org"
 
 gem "rails",    "~>4.2.2"
@@ -21,11 +21,10 @@ gem "capistrano", "2.9.0"
 gem "hipchat"
 gem "campfiyah"
 gem "slack-notifier"
-gem "flowdock"
 
 group :test do
   gem "sqlite3", "1.3.10"
-  gem "webmock"
+  gem "webmock", "1.20.1"
   gem "simplecov", "0.7.1"
   gem "rubocop"
   gem "rspec-rails"

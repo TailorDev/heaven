@@ -11,7 +11,7 @@ class Deployment
       @nwo         = nwo
       @number      = number
       @completed   = false
-      @description = "Deploying from Heaven v#{Heaven::VERSION}"
+      @description = "Deploying from Heaven v#{Heaven::VERSION} (TailorDev Edition)"
     end
 
     class << self
@@ -26,7 +26,7 @@ class Deployment
 
     def payload
       {
-        "target_url" => output,
+        "log_url" => output,
         "description" => description,
         "environment_url" => environment_url,
         :accept => "application/vnd.github.ant-man-preview+json"

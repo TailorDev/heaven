@@ -1,6 +1,10 @@
 require "spec_helper"
 
 describe "Visiting in a browser" do
+  def app
+    Heaven::Application
+  end
+
   describe "GET /" do
     it "redirects to github.com" do
       get "/"
