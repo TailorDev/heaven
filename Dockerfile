@@ -1,4 +1,4 @@
-FROM ruby:2.4-alpine
+FROM ruby:2.4.0-alpine
 MAINTAINER William Durand <will+git@drnd.me>
 
 RUN apk update && apk --update add \
