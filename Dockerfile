@@ -1,38 +1,28 @@
-FROM ruby:2.4.0-alpine
+FROM ruby:2.4.0
 MAINTAINER William Durand <will+git@drnd.me>
 
-RUN apk update && apk --update add \
+#ENV TZ=Europe/Paris
+#RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get install -y \
     # required for Heaven app
     postgresql-client tzdata libxml2-dev libxslt-dev \
     # required to install node
-    libstdc++ xz tar gnupg \
+    tar gnupg \
     # required during deployments
-    git bash build-base autoconf python automake rsync nasm openssh curl && \
-    rm -rf /var/cache/apk/*
+    git bash build-essential autoconf python automake rsync nasm openssh-client curl && \
+    rm -rf /var/lib/apt/lists/* && apt-get clean
 
 ADD Gemfile /app/
 ADD Gemfile.lock /app/
 
-RUN apk --update add --virtual build-dependencies \
-    ruby-dev postgresql-dev libc-dev linux-headers && \
-    cd /app ; bundle install --without development test && \
-    apk del build-dependencies
+RUN cd /app ; bundle install --without development test
 
-ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 8.1.4
 ENV YARN_VERSION 0.27.5
 
-RUN apk add --no-cache --virtual .build-deps \
-        binutils-gold \
-        curl \
-        g++ \
-        gcc \
-        gnupg \
-        libgcc \
-        linux-headers \
-        make \
-        python \
-  # gpg keys listed at https://github.com/nodejs/node#release-team
+# gpg keys listed at https://github.com/nodejs/node
+RUN set -ex \
   && for key in \
     9554F04D7259F04124DE6B476D5A82AC7E37093B \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
@@ -43,25 +33,15 @@ RUN apk add --no-cache --virtual .build-deps \
     C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
     56730D5401028683275BD23C23EFEFE93C4CFFFE \
   ; do \
-    gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" ; \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done \
-    && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
-    && curl -SLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
-    && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
-    && grep " node-v$NODE_VERSION.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
-    && tar -xf "node-v$NODE_VERSION.tar.xz" \
-    && cd "node-v$NODE_VERSION" \
-    && ./configure \
-    && make -j$(getconf _NPROCESSORS_ONLN) \
-    && make install \
-    && apk del .build-deps \
-    && cd .. \
-    && rm -Rf "node-v$NODE_VERSION" \
-    && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
-
-RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
+  && cd /tmp \
+  && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
+  && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+  && gpg --verify SHASUMS256.txt.asc \
+  && grep " node-v$NODE_VERSION-linux-x64.tar.gz\$" SHASUMS256.txt.asc | sha256sum -c - \
+  && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
+  && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc \
   && for key in \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
@@ -76,12 +56,11 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/yarn --strip-components=1 \
   && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
-  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && apk del .build-deps-yarn
+  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
 ADD . /app
-RUN addgroup -g 2000 heaven && \
-    adduser -u 2000 -D -G heaven heaven && \
+RUN addgroup -gid 2000 heaven && \
+    adduser --uid 2000 --disabled-password --ingroup heaven heaven && \
     chown -R heaven:heaven /app /usr/local/bundle/config
 USER heaven
 
